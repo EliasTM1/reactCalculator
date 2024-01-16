@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, GridItem, HStack } from "@chakra-ui/react";
+import { Button, Flex, Grid, GridItem, HStack } from "@chakra-ui/react";
 import { NonNumeric } from "./types";
 import { operators } from "./calButtons";
 
@@ -9,6 +9,7 @@ type KeypadProps = {
 	onEqual: () => void;
 	onClearAll: () => void;
 	onClearScreen: () => void;
+	onDecimalPoint: () => void;
 };
 
 export const Keypad = ({
@@ -16,12 +17,10 @@ export const Keypad = ({
 	onValueChanged,
 	onOperatorChange,
 	onClearAll,
+	onDecimalPoint,
 	isAllClear,
 }: KeypadProps) => {
-	const numericNumber = Array.from(
-		{ length: 10 },
-		(_, index) => index
-	).reverse();
+	const numKey = Array.from({ length: 10 }, (_, index) => index).reverse();
 
 	return (
 		<Grid
@@ -30,7 +29,6 @@ export const Keypad = ({
 			gridTemplateRows={"1fr"}
 			gridTemplateColumns={"200px"}
 		>
-			<Box> All clear === {isAllClear ? "yes" : "no"}</Box>
 			<GridItem area='btnGp1'>
 				<HStack justifyContent='space-between'>
 					{operators.map((operator) => {
@@ -47,7 +45,7 @@ export const Keypad = ({
 								}
 								_hover={{
 									backgroundColor: "calc.50",
-									color: "calc.10"
+									color: "calc.10",
 								}}
 							>
 								{operator}
@@ -61,7 +59,7 @@ export const Keypad = ({
 						onClick={onClearAll}
 						_hover={{
 							backgroundColor: "calc.50",
-							color: "calc.100"
+							color: "calc.100",
 						}}
 					>
 						{isAllClear ? "AC" : "C"}
@@ -75,19 +73,22 @@ export const Keypad = ({
 					flexDir='row-reverse'
 					justifyContent='space-between'
 				>
-					{numericNumber.map((numButton) => (
+					{numKey.map((numBtn) => (
 						<Button
-							width={numButton === 0 ? "100%" : "30%"}
-							value={numButton}
-							key={numButton}
+							width={numBtn === 0 ? "65%" : "30%"}
+							value={numBtn}
+							key={numBtn}
 							py='22px'
 							onClick={(e) =>
 								onValueChanged(Number((e.target as HTMLButtonElement).value))
 							}
 						>
-							{numButton}
+							{numBtn}
 						</Button>
 					))}
+					<Button width='30%' onClick={onDecimalPoint}>
+						.
+					</Button>
 				</HStack>
 			</GridItem>
 
@@ -103,7 +104,7 @@ export const Keypad = ({
 						onClick={onEqual}
 						_hover={{
 							backgroundColor: "calc.80",
-							color: "calc.90"
+							color: "calc.90",
 						}}
 					>
 						=

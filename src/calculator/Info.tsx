@@ -8,8 +8,8 @@ type InfoProps = {
 
 export const Info = ({ currentOperator, currentAccomulator }: InfoProps) => {
 	return (
-		<Stack pb='3rem' border='1px solid black' paddingInline='2rem'>
-			<Heading>Acomulador: {currentAccomulator}</Heading>
+		<Stack pb='3rem' border='1px solid black' paddingInline='5rem' borderRadius="10">
+			<Heading>Memory: {currentAccomulator}</Heading>
 			<Heading>Operator: {currentOperator}</Heading>
 		</Stack>
 	);
