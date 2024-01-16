@@ -1,107 +1,115 @@
-import {
-	// Box,
-	Button,
-	Grid,
-	// GridItem,
-	HStack,
-	Stack,
-	VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, HStack } from "@chakra-ui/react";
 import { NonNumeric } from "./types";
+import { operators } from "./calButtons";
 
 type KeypadProps = {
+	isAllClear: boolean;
 	onValueChanged: (qty: number) => void;
 	onOperatorChange: (operator: NonNumeric) => void;
 	onEqual: () => void;
+	onClearAll: () => void;
+	onClearScreen: () => void;
 };
 
-export const Keypad = ({ onValueChanged, onOperatorChange }: KeypadProps) => {
-	const operators: NonNumeric[] = ["/", "+", "-", "*", "=", "%", "+/-", "AC"];
+export const Keypad = ({
+	onEqual,
+	onValueChanged,
+	onOperatorChange,
+	onClearAll,
+	isAllClear,
+}: KeypadProps) => {
 	const numericNumber = Array.from(
 		{ length: 10 },
 		(_, index) => index
 	).reverse();
 
-	function handleNumericUpdate(pressedNumber: number) {
-		onValueChanged(pressedNumber);
-	}
-
 	return (
 		<Grid
-			templateAreas={`"screen screen"
-		"btnGp1 btnGp2"
-		"numeric btnGp2"`}
-			gridTemplateRows={"50px 1fr 30px"}
-			gridTemplateColumns={"150px 1fr"}
-			h='200px'
-			gap='1'
-			color='blackAlpha.700'
-			fontWeight='bold'
+			templateAreas={`"btnGp1 btnGp1"
+							"numeric btnGp2"`}
+			gridTemplateRows={"1fr"}
+			gridTemplateColumns={"200px"}
 		>
-			<HStack justifyContent='right'>
-				{operators.map((operator, index) =>
-					index > operators.length / 2 ? (
-						<Button
-							backgroundColor='calc.10'
-							color='calc.50'
-							value={operator}
-							key={operator}
-							onClick={(e) =>
-								onOperatorChange(
-									(e.target as HTMLButtonElement).value as NonNumeric
-								)
-							}
-						>
-							{operator}
-						</Button>
-					) : null
-				)}
-			</HStack>
-
-			<Stack
-				width='200px'
-				flexWrap='wrap'
-				position='relative'
-				// justifyContent='center'
-				alignContent='top'
-				flexDir='row-reverse'
-				// height='300px'
-			>
-				{numericNumber.map((numButton) => (
+			<Box> All clear === {isAllClear ? "yes" : "no"}</Box>
+			<GridItem area='btnGp1'>
+				<HStack justifyContent='space-between'>
+					{operators.map((operator) => {
+						return (
+							<Button
+								backgroundColor='calc.10'
+								color='calc.50'
+								value={operator}
+								key={operator}
+								onClick={(e) =>
+									onOperatorChange(
+										(e.target as HTMLButtonElement).value as NonNumeric
+									)
+								}
+								_hover={{
+									backgroundColor: "calc.50",
+									color: "calc.10"
+								}}
+							>
+								{operator}
+							</Button>
+						);
+					})}
 					<Button
-						padding='1.5rem'
-						width={numButton === 0 ? "93%" : ""}
-						value={numButton}
-						key={numButton}
-						onClick={(e) =>
-							handleNumericUpdate(Number((e.target as HTMLButtonElement).value))
-						}
+						backgroundColor={isAllClear ? "calc.100" : "calc.110"}
+						color='calc.50'
+						// TODO: include clear screen
+						onClick={onClearAll}
+						_hover={{
+							backgroundColor: "calc.50",
+							color: "calc.100"
+						}}
 					>
-						{numButton}
+						{isAllClear ? "AC" : "C"}
 					</Button>
-				))}
-			</Stack>
+				</HStack>
+			</GridItem>
 
-			<VStack gap='1rem'>
-				{operators.map((operator, index) =>
-					index <= operators.length / 2 ? (
+			<GridItem gridArea='numeric' mt='10px'>
+				<HStack
+					flexWrap='wrap'
+					flexDir='row-reverse'
+					justifyContent='space-between'
+				>
+					{numericNumber.map((numButton) => (
 						<Button
-							backgroundColor='calc.10'
-							color='calc.50'
-							key={index}
-							value={operator}
-							padding='1.4rem'
+							width={numButton === 0 ? "100%" : "30%"}
+							value={numButton}
+							key={numButton}
+							py='22px'
 							onClick={(e) =>
-								onOperatorChange(
-									(e.target as HTMLButtonElement).value as NonNumeric
-								)
+								onValueChanged(Number((e.target as HTMLButtonElement).value))
 							}
 						>
-							{operator}
+							{numButton}
 						</Button>
-					) : null
-				)}
-			</VStack>
+					))}
+				</HStack>
+			</GridItem>
+
+			<GridItem gridArea='btnGp2'>
+				<Flex justifyContent='center' alignContent='center'>
+					<Button
+						backgroundColor='calc.90'
+						mt='10px'
+						width='80%'
+						color='calc.50'
+						height='200'
+						fontSize='2rem'
+						onClick={onEqual}
+						_hover={{
+							backgroundColor: "calc.80",
+							color: "calc.90"
+						}}
+					>
+						=
+					</Button>
+				</Flex>
+			</GridItem>
 		</Grid>
 	);
 };

@@ -11,6 +11,9 @@ export const customTheme = extendTheme({
       60: "#E5E1DA",
       70: "#DED0B6",
       80: "#BBAB8C",
+      90: "#FF9843",
+      100: "#F05941",
+      110: "#BE3144",
     },
     currencyCode: {
       negative: "#FF8080", 
